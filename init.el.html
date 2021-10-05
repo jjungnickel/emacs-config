@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>init.el</title>
+  <style>
+    body > pre {
+      font-size: 1rem;
+      max-width: min(100rem, 100%);
+      width: max-content;
+      white-space: pre-wrap;
+      margin: auto;
+    }
+  </style>
+    <style type="text/css">
+    <!--
+      body {
+        color: #383a42;
+        background-color: #fafafa;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #a626a4;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #9ca0a4;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #9ca0a4;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #b751b6;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #e45649;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #50a14f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;; </span><span class="comment">init.el -*- lexical-binding: t; -*-
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This file controls what Doom modules are enabled and what order they load in.
+</span><span class="comment-delimiter">;; </span><span class="comment">Press 'K' on a module to view its documentation, and 'gd' to browse its directory.
+</span>
+(<span class="keyword">doom!</span> <span class="builtin">:completion</span>
+       (company                     <span class="comment-delimiter">; </span><span class="comment">the ultimate code completion backend
+</span>        +childframe)                <span class="comment-delimiter">; </span><span class="comment">... when your children are better than you
+</span>       <span class="comment-delimiter">;;</span><span class="comment">helm                       ; the *other* search engine for love and life
+</span>       <span class="comment-delimiter">;;</span><span class="comment">ido                        ; the other *other* search engine...
+</span>       <span class="comment-delimiter">;; </span><span class="comment">(ivy                      ; a search engine for love and life
+</span>       <span class="comment-delimiter">;;  </span><span class="comment">+icons                   ; ... icons are nice
+</span>       <span class="comment-delimiter">;;  </span><span class="comment">+prescient)              ; ... I know what I want(ed)
+</span>       (vertico +icons)             <span class="comment-delimiter">; </span><span class="comment">the search engine of the future
+</span>
+       <span class="builtin">:ui</span>
+       <span class="comment-delimiter">;;</span><span class="comment">deft                       ; notational velocity for Emacs
+</span>       doom                         <span class="comment-delimiter">; </span><span class="comment">what makes DOOM look the way it does
+</span>       doom-dashboard               <span class="comment-delimiter">; </span><span class="comment">a nifty splash screen for Emacs
+</span>       doom-quit                    <span class="comment-delimiter">; </span><span class="comment">DOOM quit-message prompts when you quit Emacs
+</span>       (emoji +unicode)             <span class="comment-delimiter">; </span><span class="comment">&#240;&#159;&#153;&#130;
+</span>       <span class="comment-delimiter">;;</span><span class="comment">fill-column                ; a `</span><span class="comment"><span class="constant">fill-column</span></span><span class="comment">' indicator
+</span>       hl-todo                      <span class="comment-delimiter">; </span><span class="comment">highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+</span>       <span class="comment-delimiter">;;</span><span class="comment">hydra                      ; quick documentation for related commands
+</span>       <span class="comment-delimiter">;;</span><span class="comment">indent-guides              ; highlighted indent columns, notoriously slow
+</span>       (ligatures +extra)           <span class="comment-delimiter">; </span><span class="comment">ligatures and symbols to make your code pretty again
+</span>       <span class="comment-delimiter">;;</span><span class="comment">minimap                    ; show a map of the code on the side
+</span>       modeline                     <span class="comment-delimiter">; </span><span class="comment">snazzy, Atom-inspired modeline, plus API
+</span>       nav-flash                    <span class="comment-delimiter">; </span><span class="comment">blink the current line after jumping
+</span>       <span class="comment-delimiter">;;</span><span class="comment">neotree                    ; a project drawer, like NERDTree for vim
+</span>       ophints                      <span class="comment-delimiter">; </span><span class="comment">highlight the region an operation acts on
+</span>       (popup                       <span class="comment-delimiter">; </span><span class="comment">tame sudden yet inevitable temporary windows
+</span>        +all                        <span class="comment-delimiter">; </span><span class="comment">catch all popups that start with an asterix
+</span>        +defaults)                  <span class="comment-delimiter">; </span><span class="comment">default popup rules
+</span>       <span class="comment-delimiter">;;</span><span class="comment">(tabs                      ; an tab bar for Emacs
+</span>       <span class="comment-delimiter">;;  </span><span class="comment">+centaur-tabs)           ; ... with prettier tabs
+</span>       treemacs                     <span class="comment-delimiter">; </span><span class="comment">a project drawer, like neotree but cooler
+</span>       <span class="comment-delimiter">;;</span><span class="comment">unicode                    ; extended unicode support for various languages
+</span>       vc-gutter                    <span class="comment-delimiter">; </span><span class="comment">vcs diff in the fringe
+</span>       vi-tilde-fringe              <span class="comment-delimiter">; </span><span class="comment">fringe tildes to mark beyond EOB
+</span>       (window-select +numbers)     <span class="comment-delimiter">; </span><span class="comment">visually switch windows
+</span>       workspaces                   <span class="comment-delimiter">; </span><span class="comment">tab emulation, persistence &amp; separate workspaces
+</span>       zen                          <span class="comment-delimiter">; </span><span class="comment">distraction-free coding or writing
+</span>
+       <span class="builtin">:editor</span>
+       (evil +everywhere)           <span class="comment-delimiter">; </span><span class="comment">come to the dark side, we have cookies
+</span>       file-templates               <span class="comment-delimiter">; </span><span class="comment">auto-snippets for empty files
+</span>       fold                         <span class="comment-delimiter">; </span><span class="comment">(nigh) universal code folding
+</span>       (format)                     <span class="comment-delimiter">; </span><span class="comment">automated prettiness
+</span>       <span class="comment-delimiter">;;</span><span class="comment">god                        ; run Emacs commands without modifier keys
+</span>       <span class="comment-delimiter">;;</span><span class="comment">lispy                      ; vim for lisp, for people who don't like vim
+</span>       multiple-cursors             <span class="comment-delimiter">; </span><span class="comment">editing in many places at once
+</span>       <span class="comment-delimiter">;;</span><span class="comment">objed                      ; text object editing for the innocent
+</span>       <span class="comment-delimiter">;;</span><span class="comment">parinfer                   ; turn lisp into python, sort of
+</span>       rotate-text                  <span class="comment-delimiter">; </span><span class="comment">cycle region at point between text candidates
+</span>       snippets                     <span class="comment-delimiter">; </span><span class="comment">my elves. They type so I don't have to
+</span>       <span class="comment-delimiter">;;</span><span class="comment">word-wrap                  ; soft wrapping with language-aware indent
+</span>
+       <span class="builtin">:emacs</span>
+       (dired +icons)               <span class="comment-delimiter">; </span><span class="comment">making dired pretty [functional]
+</span>       electric                     <span class="comment-delimiter">; </span><span class="comment">smarter, keyword-based electric-indent
+</span>       (ibuffer +icons)             <span class="comment-delimiter">; </span><span class="comment">interactive buffer management
+</span>       undo                         <span class="comment-delimiter">; </span><span class="comment">persistent, smarter undo for your inevitable mistakes
+</span>       vc                           <span class="comment-delimiter">; </span><span class="comment">version-control and Emacs, sitting in a tree
+</span>
+       <span class="builtin">:term</span>
+       <span class="comment-delimiter">;;</span><span class="comment">eshell                     ; the elisp shell that works everywhere
+</span>       <span class="comment-delimiter">;;</span><span class="comment">shell                      ; simple shell REPL for Emacs
+</span>       <span class="comment-delimiter">;;</span><span class="comment">term                       ; basic terminal emulator for Emacs
+</span>       vterm                        <span class="comment-delimiter">; </span><span class="comment">the best terminal emulation in Emacs
+</span>
+       <span class="builtin">:checkers</span>
+       syntax                       <span class="comment-delimiter">; </span><span class="comment">tasing you for every semicolon you forget
+</span>       (<span class="builtin">:if</span> (executable-find <span class="string">"aspell"</span>) spell) <span class="comment-delimiter">; </span><span class="comment">tasing you for misspelling mispelling
+</span>       grammar                      <span class="comment-delimiter">; </span><span class="comment">tasing grammar mistake every you make
+</span>
+       <span class="builtin">:tools</span>
+       ansible                      <span class="comment-delimiter">; </span><span class="comment">a crucible for infrastructure as code
+</span>       <span class="comment-delimiter">;;</span><span class="comment">debugger                   ; FIXME stepping through code, to help you add bugs
+</span>       <span class="comment-delimiter">;;</span><span class="comment">direnv                     ; be direct about your environment
+</span>       docker                       <span class="comment-delimiter">; </span><span class="comment">port everything to containers
+</span>       <span class="comment-delimiter">;;</span><span class="comment">editorconfig               ; let someone else argue about tabs vs spaces
+</span>       <span class="comment-delimiter">;;</span><span class="comment">ein                        ; tame Jupyter notebooks with emacs
+</span>       (eval +overlay)              <span class="comment-delimiter">; </span><span class="comment">run code, run (also, repls)
+</span>       <span class="comment-delimiter">;;</span><span class="comment">gist                       ; interacting with github gists
+</span>       (lookup                      <span class="comment-delimiter">; </span><span class="comment">helps you navigate your code and documentation
+</span>        +dictionary                 <span class="comment-delimiter">; </span><span class="comment">dictionary/thesaurus is nice
+</span>        +docsets)                   <span class="comment-delimiter">; </span><span class="comment">...or in Dash docsets locally
+</span>       lsp                          <span class="comment-delimiter">; </span><span class="comment">Language Server Protocol
+</span>       <span class="comment-delimiter">;;</span><span class="comment">macos                      ; MacOS-specific commands
+</span>       (magit                       <span class="comment-delimiter">; </span><span class="comment">a git porcelain for Emacs
+</span>        +forge)                     <span class="comment-delimiter">; </span><span class="comment">interface with git forges
+</span>       make                         <span class="comment-delimiter">; </span><span class="comment">run make tasks from Emacs
+</span>       <span class="comment-delimiter">;;</span><span class="comment">pass                       ; password manager for nerds
+</span>       pdf                          <span class="comment-delimiter">; </span><span class="comment">pdf enhancements
+</span>       <span class="comment-delimiter">;;</span><span class="comment">prodigy                    ; FIXME managing external services &amp; code builders
+</span>       rgb                          <span class="comment-delimiter">; </span><span class="comment">creating color strings
+</span>       <span class="comment-delimiter">;;</span><span class="comment">taskrunner                 ; taskrunner for all your projects
+</span>       <span class="comment-delimiter">;;</span><span class="comment">terraform                  ; infrastructure as code
+</span>       <span class="comment-delimiter">;;</span><span class="comment">tmux                       ; an API for interacting with tmux
+</span>       upload                       <span class="comment-delimiter">; </span><span class="comment">map local to remote projects via ssh/ftp
+</span>
+       <span class="builtin">:os</span>
+       tty                          <span class="comment-delimiter">; </span><span class="comment">improve the terminal Emacs experience
+</span>
+       <span class="builtin">:lang</span>
+       <span class="comment-delimiter">;;</span><span class="comment">agda                       ; types of types of types of types...
+</span>       <span class="comment-delimiter">;;</span><span class="comment">beancount                  ; mind the GAAP
+</span>       <span class="comment-delimiter">;;</span><span class="comment">cc                         ; C/C++/Obj-C madness
+</span>       <span class="comment-delimiter">;;</span><span class="comment">clojure                    ; java with a lisp
+</span>       <span class="comment-delimiter">;;</span><span class="comment">common-lisp                ; if you've seen one lisp, you've seen them all
+</span>       <span class="comment-delimiter">;;</span><span class="comment">coq                        ; proofs-as-programs
+</span>       <span class="comment-delimiter">;;</span><span class="comment">crystal                    ; ruby at the speed of c
+</span>       <span class="comment-delimiter">;;</span><span class="comment">csharp                     ; unity, .NET, and mono shenanigans
+</span>       data                         <span class="comment-delimiter">; </span><span class="comment">config/data formats
+</span>       <span class="comment-delimiter">;;</span><span class="comment">(dart +flutter)            ; paint ui and not much else
+</span>       <span class="comment-delimiter">;;</span><span class="comment">dhall                      ; JSON with FP sprinkles
+</span>       <span class="comment-delimiter">;;</span><span class="comment">elixir                     ; erlang done right
+</span>       <span class="comment-delimiter">;;</span><span class="comment">elm                        ; care for a cup of TEA?
+</span>       emacs-lisp                   <span class="comment-delimiter">; </span><span class="comment">drown in parentheses
+</span>       <span class="comment-delimiter">;;</span><span class="comment">erlang                     ; an elegant language for a more civilized age
+</span>       ess                          <span class="comment-delimiter">; </span><span class="comment">emacs speaks statistics
+</span>       <span class="comment-delimiter">;;</span><span class="comment">faust                      ; dsp, but you get to keep your soul
+</span>       <span class="comment-delimiter">;;</span><span class="comment">fsharp                     ; ML stands for Microsoft's Language
+</span>       <span class="comment-delimiter">;;</span><span class="comment">fstar                      ; (dependent) types and (monadic) effects and Z3
+</span>       <span class="comment-delimiter">;;</span><span class="comment">gdscript                   ; the language you waited for
+</span>       <span class="comment-delimiter">;;</span><span class="comment">(go +lsp)                  ; the hipster dialect
+</span>       <span class="comment-delimiter">;;</span><span class="comment">(haskell +lsp)             ; a language that's lazier than I am
+</span>       <span class="comment-delimiter">;;</span><span class="comment">hy                         ; readability of scheme w/ speed of python
+</span>       <span class="comment-delimiter">;;</span><span class="comment">idris                      ;
+</span>       json                         <span class="comment-delimiter">; </span><span class="comment">At least it ain't XML
+</span>       <span class="comment-delimiter">;;</span><span class="comment">(java +meghanada)          ; the poster child for carpal tunnel syndrome
+</span>       (javascript +lsp)            <span class="comment-delimiter">; </span><span class="comment">all(hope(abandon(ye(who(enter(here))))))
+</span>       (julia +lsp)                 <span class="comment-delimiter">; </span><span class="comment">Python, R, and MATLAB in a blender
+</span>       <span class="comment-delimiter">;;</span><span class="comment">kotlin                     ; a better, slicker Java(Script)
+</span>       (latex                       <span class="comment-delimiter">; </span><span class="comment">writing papers in Emacs has never been so fun
+</span>        +latexmk                    <span class="comment-delimiter">; </span><span class="comment">what else would you use?
+</span>        +cdlatex                    <span class="comment-delimiter">; </span><span class="comment">quick maths symbols
+</span>        +fold)                      <span class="comment-delimiter">; </span><span class="comment">fold the clutter away nicities
+</span>       <span class="comment-delimiter">;;</span><span class="comment">lean                       ; proof that mathematicians need help
+</span>       <span class="comment-delimiter">;;</span><span class="comment">factor                     ; for when scripts are stacked against you
+</span>       <span class="comment-delimiter">;;</span><span class="comment">ledger                     ; an accounting system in Emacs
+</span>       lua                          <span class="comment-delimiter">; </span><span class="comment">one-based indices? one-based indices
+</span>       markdown                     <span class="comment-delimiter">; </span><span class="comment">writing docs for people to ignore
+</span>       <span class="comment-delimiter">;;</span><span class="comment">nim                        ; python + lisp at the speed of c
+</span>       <span class="comment-delimiter">;;</span><span class="comment">nix                        ; I hereby declare "nix geht mehr!"
+</span>       <span class="comment-delimiter">;;</span><span class="comment">ocaml                      ; an objective camel
+</span>       (org                         <span class="comment-delimiter">; </span><span class="comment">organize your plain life in plain text
+</span>        +pretty                     <span class="comment-delimiter">; </span><span class="comment">yessss my pretties! (nice unicode symbols)
+</span>        +dragndrop                  <span class="comment-delimiter">; </span><span class="comment">drag &amp; drop files/images into org buffers
+</span>        <span class="comment-delimiter">;;</span><span class="comment">+hugo                     ; use Emacs for hugo blogging
+</span>        +noter                      <span class="comment-delimiter">; </span><span class="comment">enhanced PDF notetaking
+</span>        +jupyter                    <span class="comment-delimiter">; </span><span class="comment">ipython/jupyter support for babel
+</span>        +pandoc                     <span class="comment-delimiter">; </span><span class="comment">export-with-pandoc support
+</span>        +gnuplot                    <span class="comment-delimiter">; </span><span class="comment">who doesn't like pretty pictures
+</span>        <span class="comment-delimiter">;;</span><span class="comment">+pomodoro                 ; be fruitful with the tomato technique
+</span>        +present                    <span class="comment-delimiter">; </span><span class="comment">using org-mode for presentations
+</span>        +roam2)                     <span class="comment-delimiter">; </span><span class="comment">wander around notes
+</span>       <span class="comment-delimiter">;;</span><span class="comment">php                        ; perl's insecure younger brother
+</span>       <span class="comment-delimiter">;;</span><span class="comment">plantuml                   ; diagrams for confusing people more
+</span>       <span class="comment-delimiter">;;</span><span class="comment">purescript                 ; javascript, but functional
+</span>       (python +lsp +pyright)       <span class="comment-delimiter">; </span><span class="comment">beautiful is better than ugly
+</span>       <span class="comment-delimiter">;;</span><span class="comment">qt                         ; the 'cutest' gui framework ever
+</span>       <span class="comment-delimiter">;;</span><span class="comment">racket                     ; a DSL for DSLs
+</span>       <span class="comment-delimiter">;;</span><span class="comment">raku                       ; the artist formerly known as perl6
+</span>       <span class="comment-delimiter">;;</span><span class="comment">rest                       ; Emacs as a REST client
+</span>       <span class="comment-delimiter">;;</span><span class="comment">rst                        ; ReST in peace
+</span>       <span class="comment-delimiter">;;</span><span class="comment">(ruby +rails)              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+</span>       (rust +lsp)                  <span class="comment-delimiter">; </span><span class="comment">Fe2O3.unwrap().unwrap().unwrap().unwrap()
+</span>       <span class="comment-delimiter">;;</span><span class="comment">scala                      ; java, but good
+</span>       scheme                       <span class="comment-delimiter">; </span><span class="comment">a fully conniving family of lisps
+</span>       sh                           <span class="comment-delimiter">; </span><span class="comment">she sells {ba,z,fi}sh shells on the C xor
+</span>       <span class="comment-delimiter">;;</span><span class="comment">sml                        ; no, the /other/ ML
+</span>       <span class="comment-delimiter">;;</span><span class="comment">solidity                   ; do you need a blockchain? No.
+</span>       <span class="comment-delimiter">;;</span><span class="comment">swift                      ; who asked for emoji variables?
+</span>       <span class="comment-delimiter">;;</span><span class="comment">terra                      ; Earth and Moon in alignment for performance.
+</span>       web                          <span class="comment-delimiter">; </span><span class="comment">the tubes
+</span>       yaml                         <span class="comment-delimiter">; </span><span class="comment">JSON, but readable
+</span>       <span class="comment-delimiter">;;</span><span class="comment">zig                        ; C, but simpler
+</span>
+       <span class="builtin">:email</span>
+       (<span class="builtin">:if</span> (executable-find <span class="string">"mu"</span>) (mu4e +org +gmail))
+       <span class="comment-delimiter">;;</span><span class="comment">notmuch
+</span>       <span class="comment-delimiter">;;</span><span class="comment">(wanderlust +gmail)
+</span>
+       <span class="builtin">:app</span>
+       <span class="comment-delimiter">;;</span><span class="comment">calendar                   ; A dated approach to timetabling
+</span>       <span class="comment-delimiter">;;</span><span class="comment">emms                       ; Multimedia in Emacs is music to my ears
+</span>       everywhere                   <span class="comment-delimiter">; </span><span class="comment">*leave* Emacs!? You must be joking.
+</span>       irc                          <span class="comment-delimiter">; </span><span class="comment">how neckbeards socialize
+</span>       (rss +org)                   <span class="comment-delimiter">; </span><span class="comment">emacs as an RSS reader
+</span>       <span class="comment-delimiter">;;</span><span class="comment">twitter                    ; twitter client https://twitter.com/vnought
+</span>
+       <span class="builtin">:config</span>
+       literate
+       (default +bindings +smartparens)
+       )
+</pre>
+  </body>
+</html>
