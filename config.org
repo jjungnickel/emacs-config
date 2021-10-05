@@ -278,6 +278,15 @@ few extras.
   - It's slightly quirky. Look at the diagonal cut on stems for example.
     Helvetica is a masterful design, but I like a bit more pizzazz now and then.
 + A few LSP servers. Take a look at [[file:init.el][init.el]] to see which modules have the ~+lsp~ flag.
++ The [[https://github.com/dandavison/delta/][Delta]] binary. It's packaged for some distributions but I installed it with
+  #+begin_src shell :eval no :tangle (if (executable-find "delta") "no" "setup.sh")
+sudo yay -Sy git-delta
+  #+end_src
++ The =theme-magic= package requires the ~wal~ (=pywal=) executable. If this is
+  packaged for you, great! If not, it's just a quick ~pip install~ away.
+  #+begin_src shell :eval no :tangle (if (executable-find "wal") "no" "setup.sh")
+sudo yay -Sy python-pywal
+  #+end_src
 
 ** Current Issues
 *** Magit push in daemon
@@ -313,15 +322,15 @@ for more info).
 ** Personal Information
 It's useful to have some basic personal information
 #+begin_src emacs-lisp
-(setq user-full-name "TEC"
-      user-mail-address "tec@tecosaur.com")
+(setq user-full-name "Jan Jungnickel"
+      user-mail-address "jan@jungnickel.com")
 #+end_src
 Apparently this is used by ~GPG~, and all sorts of other things.
 
 Speaking of ~GPG~, I want to use =~/.authinfo.gpg= instead of the default in
 =~/.emacs.d=. Why? Because my home directory is already cluttered, so this won't
 make a difference, and I don't want to accidentally purge this file (I have done
-src_shell{rm -rf~/.emac.d~ before}. I also want to cache as much as possible, as
+src_shell{rm -rf~/.emacs.d~ before}. I also want to cache as much as possible, as
 my home machine is pretty safe, and my laptop is shutdown a lot.
 #+begin_src emacs-lisp
 (setq auth-sources '("~/.authinfo.gpg")
@@ -348,9 +357,6 @@ the following:
       scroll-margin 2)                            ; It's nice to maintain a little margin
 
 (display-time-mode 1)                             ; Enable time in the mode-line
-
-(unless (string-match-p "^Power N/A" (battery))   ; On laptops...
-  (display-battery-mode 1))                       ; it's nice to know how much power you have
 
 (global-subword-mode 1)                           ; Iterate through CamelCase words
 #+end_src
@@ -497,8 +503,8 @@ I reckon enabling half the modules Doom provides should do it.
 
 #+name: doom-completion
 #+begin_src emacs-lisp
-(company                     ; the ultimate code completion backend
- +childframe)                ; ... when your children are better than you
+(company)                     ; the ultimate code completion backend
+;; +childframe                ; ... when your children are better than you
 ;;helm                       ; the *other* search engine for love and life
 ;;ido                        ; the other *other* search engine...
 ;; (ivy                      ; a search engine for love and life
@@ -540,10 +546,10 @@ zen                          ; distraction-free coding or writing
 
 #+name: doom-editor
 #+begin_src emacs-lisp
-(evil +everywhere)           ; come to the dark side, we have cookies
+(evil)          ; come to the dark side, we have cookies
 file-templates               ; auto-snippets for empty files
 fold                         ; (nigh) universal code folding
-(format)                     ; automated prettiness
+(format +onsave)             ; automated prettiness
 ;;god                        ; run Emacs commands without modifier keys
 ;;lispy                      ; vim for lisp, for people who don't like vim
 multiple-cursors             ; editing in many places at once
@@ -575,7 +581,7 @@ vterm                        ; the best terminal emulation in Emacs
 #+begin_src emacs-lisp
 syntax                       ; tasing you for every semicolon you forget
 (:if (executable-find "aspell") spell) ; tasing you for misspelling mispelling
-grammar                      ; tasing grammar mistake every you make
+; grammar                      ; tasing grammar mistake every you make
 #+end_src
 
 #+name: doom-tools
@@ -601,7 +607,7 @@ pdf                          ; pdf enhancements
 ;;prodigy                    ; FIXME managing external services & code builders
 rgb                          ; creating color strings
 ;;taskrunner                 ; taskrunner for all your projects
-;;terraform                  ; infrastructure as code
+terraform                  ; infrastructure as code
 ;;tmux                       ; an API for interacting with tmux
 upload                       ; map local to remote projects via ssh/ftp
 #+end_src
@@ -645,7 +651,7 @@ ess                          ; emacs speaks statistics
 json                         ; At least it ain't XML
 ;;(java +meghanada)          ; the poster child for carpal tunnel syndrome
 (javascript +lsp)            ; all(hope(abandon(ye(who(enter(here))))))
-(julia +lsp)                 ; Python, R, and MATLAB in a blender
+;;(julia +lsp)                 ; Python, R, and MATLAB in a blender
 ;;kotlin                     ; a better, slicker Java(Script)
 (latex                       ; writing papers in Emacs has never been so fun
  +latexmk                    ; what else would you use?
@@ -709,21 +715,24 @@ I couldn't resist the Email and Feed modules.
 ;;calendar                   ; A dated approach to timetabling
 ;;emms                       ; Multimedia in Emacs is music to my ears
 everywhere                   ; *leave* Emacs!? You must be joking.
-irc                          ; how neckbeards socialize
-(rss +org)                   ; emacs as an RSS reader
+;;irc                          ; how neckbeards socialize
+;; (rss +org)                   ; emacs as an RSS reader
 ;;twitter                    ; twitter client https://twitter.com/vnought
 #+end_src
 
 *** Visual Settings
-**** Font Face
+**** Font Face :ATTACH:
+:PROPERTIES:
+:ID:       7bc6d00e-4ab4-4fbc-8acb-67ed3b352d27
+:END:
 'Fira Code' is nice, and 'Overpass' makes for a nice sans companion. We just need to
 fiddle with the font sizes a tad so that they visually match. Just for fun I'm
-trying out JetBrains Mono though. So far I have mixed feelings on it, some
+trying out Iosevka though. So far I have mixed feelings on it, some
 aspects are nice, but on others I prefer Fira.
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "JetBrains Mono" :size 24)
-      doom-big-font (font-spec :family "JetBrains Mono" :size 36)
-      doom-variable-pitch-font (font-spec :family "Overpass" :size 24)
+(setq doom-font (font-spec :family "Iosevka" :size 28)
+      doom-big-font (font-spec :family "Iosevka" :size 36)
+      doom-variable-pitch-font (font-spec :family "Overpass" :size 28)
       doom-unicode-font (font-spec :family "JuliaMono")
       doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
 #+end_src
@@ -969,63 +978,15 @@ Doom adds an =org-mode= hook ~+literate-enable-recompile-h~. This is a nice idea
 but it's too blocking for my taste. Since I trust my tangling to be fairly
 straightforward, I'll just redefine it to a simpler, async, function.
 #+begin_src emacs-lisp
-(defvar +literate-tangle--proc nil)
-(defvar +literate-tangle--proc-start-time nil)
-
 (defadvice! +literate-tangle-async-h ()
   "A very simplified version of `+literate-tangle-h', but async."
   :override #'+literate-tangle-h
-  (unless (getenv "__NOTANGLE")
-    (let ((default-directory doom-private-dir))
-      (when +literate-tangle--proc
-        (message "Killing outdated tangle process...")
-        (set-process-sentinel +literate-tangle--proc #'ignore)
-        (kill-process +literate-tangle--proc)
-        (sit-for 0.3)) ; ensure the message is seen for a bit
-      (setq +literate-tangle--proc-start-time (float-time)
-            +literate-tangle--proc
-            (start-process "tangle-config"
-                           (get-buffer-create " *tangle config*")
-                           "emacs" "--batch" "--eval"
-                           (format "(progn \
-(require 'ox) \
-(require 'ob-tangle) \
-(setq org-confirm-babel-evaluate nil \
-      org-inhibit-startup t \
-      org-mode-hook nil \
-      write-file-functions nil \
-      before-save-hook nil \
-      after-save-hook nil \
-      vc-handled-backends nil \
-      org-startup-folded nil \
-      org-startup-indented nil) \
-(org-babel-tangle-file \"%s\" \"%s\"))"
-                                   +literate-config-file
-                                   (expand-file-name (concat doom-module-config-file ".el")))))
-      (set-process-sentinel +literate-tangle--proc #'+literate-tangle--sentinel)
-      (run-at-time nil nil (lambda () (message "Tangling config.org"))) ; ensure shown after a save message
-      "Tangling config.org...")))
-
-(defun +literate-tangle--sentinel (process signal)
-  (cond
-   ((and (eq 'exit (process-status process))
-         (= 0 (process-exit-status process)))
-    (message "Tangled config.org sucessfully (took %.1fs)"
-             (- (float-time) +literate-tangle--proc-start-time))
-    (setq +literate-tangle--proc nil))
-   ((memq (process-status process) (list 'exit 'signal))
-    (+popup-buffer (get-buffer " *tangle config*"))
-    (message "Failed to tangle config.org (after %.1fs)"
-             (- (float-time) +literate-tangle--proc-start-time))
-    (setq +literate-tangle--proc nil))))
-
-(defun +literate-tangle-check-finished ()
-  (when (and (process-live-p +literate-tangle--proc)
-             (yes-or-no-p "Config is currently retangling, would you please wait a few seconds?"))
-    (switch-to-buffer " *tangle config*")
-    (signal 'quit nil)))
-(add-hook! 'kill-emacs-hook #'+literate-tangle-check-finished)
-#+end_src
+  (let ((default-directory doom-private-dir))
+    (async-shell-command
+     (format "emacs --batch --eval \"(progn \
+(require 'org) (setq org-confirm-babel-evaluate nil) \
+(org-babel-tangle-file \\\"%s\\\"))\""
+             +literate-config-file))))
 #+end_src
 *** Dashboard quick actions
 
@@ -1492,39 +1453,6 @@ alias m='e --eval "(progn (magit-status) (delete-other-windows))"'
 alias mt="m -t"
 alias et="e -t"
 #+end_src
-*** Prompt to run setup script
-
-At various points in this config, content is conditionally tangled to
-=./setup.sh=. It's no good just putting content there if it isn't run though.
-To help remind me to run it when needed, let's add a little prompt when there's
-anything to be run.
-
-#+name: run-setup
-#+begin_src emacs-lisp :tangle no
-(if (file-exists-p "setup.sh")
-    (if (string-empty-p (string-trim (with-temp-buffer (insert-file-contents "setup.sh") (buffer-string)) "#!/usr/bin/env bash"))
-        (message ";; Setup script is empty")
-      (message ";; Detected content in the setup script")
-      (pp-to-string
-       `(unless noninteractive
-          (defun +config-run-setup ()
-            (when (yes-or-no-p (format "%s The setup script has content. Check and run the script?"
-                                       (propertize "Warning!" 'face '(bold warning))))
-              (find-file (expand-file-name "setup.sh" doom-private-dir))
-              (when (yes-or-no-p "Would you like to run this script?")
-                (async-shell-command "./setup.sh"))))
-          (add-hook! 'doom-init-ui-hook
-            (run-at-time nil nil #'+config-run-setup)))))
-  (message ";; setup.sh did not exist during tangle. Tangle again.")
-  (pp-to-string
-   `(unless noninteractive
-      (add-hook! 'doom-init-ui-hook #'+literate-tangle-async-h))))
-#+end_src
-
-#+begin_src emacs-lisp :noweb no-export
-<<run-setup()>>
-#+end_src
-
 * Packages
 ** Loading instructions
 :PROPERTIES:
@@ -1608,37 +1536,6 @@ sounds nice to me.
 (package! rotate :pin "4e9ac3ff800880bd9b705794ef0f7c99d72900a6")
 #+end_src
 
-*** Emacs Everywhere
-The name says it all. It's loaded and set up (a bit) by =:app everywhere=, however
-as I develop this I want the unpinned version I have as a submodule.
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! emacs-everywhere :recipe (:local-repo "lisp/emacs-everywhere"))
-(unpin! emacs-everywhere)
-#+end_src
-
-Additionally, I'm going to make some personal choices that aren't made in the
-Doom module.
-
-#+begin_src emacs-lisp
-(use-package! emacs-everywhere
-  :if (daemonp)
-  :config
-  (require 'spell-fu)
-  (setq emacs-everywhere-major-mode-function #'org-mode
-        emacs-everywhere-frame-name-format "Edit ∷ %s — %s")
-  (defadvice! emacs-everywhere-raise-frame ()
-    :after #'emacs-everywhere-set-frame-name
-    (setq emacs-everywhere-frame-name (format emacs-everywhere-frame-name-format
-                                (emacs-everywhere-app-class emacs-everywhere-current-app)
-                                (truncate-string-to-width
-                                 (emacs-everywhere-app-title emacs-everywhere-current-app)
-                                 45 nil nil "…")))
-    ;; need to wait till frame refresh happen before really set
-    (run-with-timer 0.1 nil #'emacs-everywhere-raise-frame-1))
-  (defun emacs-everywhere-raise-frame-1 ()
-    (call-process "wmctrl" nil nil nil "-a" emacs-everywhere-frame-name)))
-#+end_src
 *** Which-key
 #+begin_quote
 From the =:core packages= module.
@@ -1673,21 +1570,6 @@ have the following.
           (defun +abbrev-file-name ()
             (setq-default abbrev-mode t)
             (setq abbrev-file-name (expand-file-name "abbrev.el" doom-private-dir))))
-#+end_src
-
-*** Very large files
-
-The /very large files/ mode loads large files in chunks, allowing one to open
-ridiculously large files.
-#+begin_src emacs-lisp :tangle packages.el
-(package! vlf :recipe (:host github :repo "m00natic/vlfi" :files ("*.el"))
-  :pin "cc02f2533782d6b9b628cec7e2dcf25b2d05a27c" :disable t)
-#+end_src
-
-To make VLF available without delaying startup, we'll just load it in quiet moments.
-#+begin_src emacs-lisp
-(use-package! vlf-setup
-  :defer-incrementally vlf-tune vlf-base vlf-write vlf-search vlf-occur vlf-follow vlf-ediff vlf)
 #+end_src
 
 *** Eros
@@ -1750,31 +1632,23 @@ From the =:tools magit= module.
 
 [[xkcd:1597]]
 
-Magit is great as-is, thanks for making such a lovely package [[https://github.com/tarsius][Jonas]]!
-
-*** Magit delta
-
-[[https://github.com/dandavison/delta/][Delta]] is a git diff syntax highlighter written in rust. The author also wrote a
-package to hook this into the magit diff view (which don't get any syntax
-highlighting by default). This requires the ~delta~ binary. It's packaged on some
-distributions, but most reliably installed through Rust's package manager cargo.
-
-#+begin_src shell :eval no :tangle (if (or (not (executable-find "cargo")) (executable-find "delta")) "no" "setup.sh")
-cargo install git-delta
-#+end_src
-
-Now we can make use of the package for this.
-#+begin_src emacs-lisp :tangle packages.el
-;; (package! magit-delta :recipe (:host github :repo "dandavison/magit-delta") :pin "56cdffd377279589aa0cb1df99455c098f1848cf")
-#+end_src
-
-All that's left is to hook it into magit
+Magit is absolutely great by default. The diffs don't get any
+syntax-highlighting-love though which is a bit sad. Thankfully
+[[https://github.com/dandavison/magit-delta][dandavison/magit-delta]] exists, which we can put to use.
 #+begin_src emacs-lisp
 ;; (after! magit
 ;;   (magit-delta-mode +1))
 #+end_src
-Unfortunately this currently seems to mess things up, which is something I'll
-want to look into later.
+Unfortunately this seems to mess things up, which is something I'll want to look
+into later.
+
+*** Magit delta
+
+[[https://github.com/dandavison/delta/][Delta]] is a git diff syntax highlighter written in rust. The author also wrote a
+package to hook this into the magit diff view. This requires the ~delta~ binary.
+#+begin_src emacs-lisp :tangle packages.el
+;; (package! magit-delta :recipe (:host github :repo "dandavison/magit-delta") :pin "56cdffd377279589aa0cb1df99455c098f1848cf")
+#+end_src
 
 *** Smerge
 
@@ -1952,7 +1826,7 @@ That's no problem though, we just need to help TRAMP find them.
 Sometimes pressing =TAB= is just too much.
 #+begin_src emacs-lisp :tangle packages.el
 (package! aas :recipe (:host github :repo "ymarco/auto-activating-snippets")
-  :pin "1699bec4d244a1f62af29fe4eb8b79b6d2fccf7d")
+  :pin "118ed7fc948b6d91eea727df35a1639521bf5fdb")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2009,7 +1883,7 @@ Nested snippets are good, so let's enable that.
 
 For when you want to change the case pattern for a symbol.
 #+begin_src emacs-lisp :tangle packages.el
-(package! string-inflection :pin "fd7926ac17293e9124b31f706a4e8f38f6a9b855")
+(package! string-inflection :pin "c4a519be102cb99dd86be3ee8c387f008d097635")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2084,7 +1958,7 @@ welcomed into Emacs 28. However, he is also rather attentive with updates, and
 so I'd like to make sure we have a recent version.
 
 #+begin_src emacs-lisp :tangle packages.el
-(package! modus-themes :pin "392ebb115b07f8052d512ec847619387d109edd6")
+(package! modus-themes :pin "52532a1ac2f3b707e79ba67ada8bf36846e45048")
 #+end_src
 
 *** Theme magic
@@ -2092,12 +1966,6 @@ so I'd like to make sure we have a recent version.
 With all our fancy Emacs themes, my terminal is missing out!
 #+begin_src emacs-lisp :tangle packages.el
 (package! theme-magic :pin "844c4311bd26ebafd4b6a1d72ddcc65d87f074e3")
-#+end_src
-
-This operates using =pywal=, which is present in some repositories, but most
-reliably installed with =pip=.
-#+begin_src shell :eval no :tangle (if (executable-find "wal") "no" "setup.sh")
-sudo python3 -m pip install pywal
 #+end_src
 
 Theme magic takes a look at a number of faces, the saturation levels, and colour
@@ -3959,7 +3827,7 @@ Using [[https://gitlab.com/shackra/goimapnotify][goimapnotify]] we should be abl
 mail. Unfortunately this means /yet another/ config file :(
 
 We install with
-#+begin_src shell :eval no :tangle (if (or (not (executable-find "mu")) (executable-find "goimapnotify")) "no" "setup.sh")
+#+begin_src shell :eval no :tangle (if (executable-find "goimapnotify") "no" "setup.sh")
 go get -u gitlab.com/shackra/goimapnotify
 ln -s ~/.local/share/go/bin/goimapnotify ~/.local/bin/
 #+end_src
@@ -4038,7 +3906,7 @@ Prevents a series of redisplays from being called (when set to an appropriate va
 
 **** Config transcoding & service management
 As long as the =mbsyncrc= file exists, this is as easy as running
-#+begin_src shell :tangle (if (or (not (executable-find "mu")) (file-exists-p "~/.config/imapnotify")) "no" "setup.sh")
+#+begin_src shell :tangle (if (file-exists-p "~/.config/imapnotify") "no" "setup.sh")
 ~/.config/doom/misc/mbsync-imapnotify.py
 #+end_src
 
@@ -4442,7 +4310,7 @@ start, so for that I'll do the 'normal' thing and run ~mbsync -all~ every so oft
 --- let's say five minutes.
 
 We can accomplish this via a systemd timer, and service file.
-#+begin_src systemd :tangle (if (executable-find "mu") "~/.config/systemd/user/mbsync.timer" "no")
+#+begin_src systemd :tangle ~/.config/systemd/user/mbsync.timer
 [Unit]
 Description=call mbsync on all accounts every 5 minutes
 ConditionPathExists=%h/.mbsyncrc
@@ -4455,7 +4323,7 @@ OnUnitInactiveSec=5m
 WantedBy=default.target
 #+end_src
 
-#+begin_src systemd :tangle (if (executable-find "mu") "~/.config/systemd/user/mbsync.service" "no")
+#+begin_src systemd :tangle ~/.config/systemd/user/mbsync.service
 [Unit]
 Description=mbsync service, sync all mail
 Documentation=man:mbsync(1)
@@ -4470,7 +4338,7 @@ WantedBy=mail.target
 #+end_src
 
 Enabling (and starting) this is as simple as
-#+begin_src shell :tangle (if (or (not (executable-find "mu")) (string= "enabled\n" (shell-command-to-string "systemctl --user is-enabled mbsync.timer"))) "no" "setup.sh")
+#+begin_src shell :tangle (if (string= "enabled\n" (shell-command-to-string "systemctl --user is-enabled mbsync.timer")) "no" "setup.sh")
 systemctl --user enable mbsync.timer --now
 #+end_src
 *** Indexing/Searching
@@ -4693,17 +4561,13 @@ Categories=Network;Email;
 StartupWMClass=Emacs
 #+end_src
 
-To register this, just call
-#+begin_src shell :tangle (if (or (not (executable-find "mu")) (string= (shell-command-to-string "xdg-mime query default x-scheme-handler/mailto") "emacsmail.desktop\n")) "no" "setup.sh")
-update-desktop-database ~/.local/share/applications
-#+end_src
 
 We also want to define ~mu4e-compose-from-mailto~.
 #+begin_src emacs-lisp
 (defun mu4e-compose-from-mailto (mailto-string &optional quit-frame-after)
   (require 'mu4e)
   (unless mu4e~server-props (mu4e t) (sleep-for 0.1))
-  (let* ((mailto (message-parse-mailto-url mailto-string))
+  (let* ((mailto (rfc2368-parse-mailto-url mailto-string))
          (to (cdr (assoc "To" mailto)))
          (subject (or (cdr (assoc "Subject" mailto)) ""))
          (body (cdr (assoc "Body" mailto)))
@@ -4748,8 +4612,7 @@ We can also use this a signature,
 #+begin_src emacs-lisp
 (setq message-signature mu4e-from-name)
 #+end_src
-**** Working with the Org mailing list
-***** Adding =X-Woof= headers
+**** Adding =X-Woof= headers
 
 I'm fairly active on the Org mailing list (ML). The Org ML has a linked
 bug/patch tracker, https://updates.orgmode.org/ managed by [[https://github.com/bzg/woof][Woof]]. However, I feel
@@ -4819,121 +4682,6 @@ Now we just need a function which will add such a header to a buffer
 #+end_src
 
 Lovely! That should make adding these headers a breeze.
-
-***** Patch workflow
-
-Testing patches from the ML is currently more hassle than it needs to be. Let's
-change that.
-
-#+begin_src emacs-lisp
-(after! mu4e
-  (defvar +org-ml-target-dir "~/.emacs.d/.local/straight/repos/org-mode/")
-  (defvar +org-ml-max-age 600
-    "Maximum permissible age in seconds.")
-  (defvar +org-ml--cache-timestamp 0)
-  (defvar +org-ml--cache nil)
-
-  (define-minor-mode +org-ml-patchy-mood-mode
-    "Apply patches to Org in bulk."
-    :global t
-    (let ((action (cons "apply patch to org" #'+org-ml-apply-patch)))
-      (if +org-ml-patchy-mood-mode
-          (add-to-list 'mu4e-view-actions action)
-        (setq mu4e-view-actions (delete action mu4e-view-actions)))))
-
-  (defun +org-ml-apply-patch (msg)
-    "Apply the patch in the current message to Org."
-    (interactive)
-    (unless msg (setq msg (mu4e-message-at-point)))
-    (with-current-buffer (get-buffer-create "*Shell: Org apply patches*")
-      (erase-buffer)
-      (let* ((default-directory +org-ml-target-dir)
-             (exit-code (call-process "git" nil t nil "am" (mu4e-message-field msg :path))))
-        (magit-refresh)
-        (when (not (= 0 exit-code))
-          (+popup/buffer)))))
-
-  (defun +org-ml-current-patches ()
-    "Get the currently open patches, as a list of alists.
-Entries of the form (subject . id)."
-    (delq nil
-          (mapcar
-           (lambda (entry)
-             (unless (plist-get entry :fixed)
-               (cons
-                (format "%-8s  %s"
-                        (propertize
-                         (replace-regexp-in-string "T.*" ""
-                                                   (plist-get entry :date))
-                         'face 'font-lock-doc-face)
-                        (propertize
-                         (replace-regexp-in-string "\\[PATCH\\] ?" ""
-                                                   (plist-get entry :summary))
-                         'face 'font-lock-keyword-face))
-                (plist-get entry :id))))
-           (with-current-buffer (url-retrieve-synchronously "https://updates.orgmode.org/data/patches")
-             (goto-char url-http-end-of-headers)
-             (json-parse-buffer :object-type 'plist)))))
-
-  (defun +org-ml-select-patch-thread ()
-    "Find and apply a proposed Org patch."
-    (interactive)
-    (let* ((current-workspace (+workspace-current))
-           (patches (progn
-                      (when (or (not +org-ml--cache)
-                                (> (- (float-time) +org-ml--cache-timestamp)
-                                   +org-ml-max-age))
-                        (setq +org-ml--cache (+org-ml-current-patches)
-                              +org-ml--cache-timestamp (float-time)))
-                      +org-ml--cache))
-           (msg-id (cdr (assoc (completing-read
-                                "Thread: " (mapcar #'car patches))
-                               patches))))
-      (+workspace-switch +mu4e-workspace-name)
-      (mu4e-view-message-with-message-id msg-id)
-      (unless +org-ml-patchy-mood-mode
-        (add-to-list 'mu4e-view-actions
-                     (cons "apply patch to org" #'+org-ml-transient-mu4e-action)))))
-
-  (defun +org-ml-transient-mu4e-action (msg)
-    (setq mu4e-view-actions
-          (delete (cons "apply patch to org" #'+org-ml-transient-mu4e-action)
-                  mu4e-view-actions))
-    (+workspace/other)
-    (magit-status +org-ml-target-dir)
-    (+org-ml-apply-patch msg)))
-#+end_src
-
-***** Mail list archive links
-
-The other thing which it's good to be easily able to do is grab a link to the
-current message on https://list.orgmode.org.
-
-#+begin_src emacs-lisp
-(after! mu4e
-  (defun +mu4e-ml-message-link (msg)
-    "Copy the link to MSG on the mailing list archives."
-    (let* ((list-addr (or (mu4e-message-field msg :mailing-list)
-                          (cdar (mu4e-message-field-raw msg :list-post))
-                          (thread-last (append (mu4e-message-field msg :to)
-                                               (mu4e-message-field msg :cc))
-                            (mapcar #'last)
-                            (mapcar #'cdr)
-                            (mapcar (lambda (addr)
-                                      (when (string-match-p "emacs.*@gnu\\.org$" addr)
-                                        (replace-regexp-in-string "@" "." addr))))
-                            (delq nil)
-                            (car))))
-           (msg-url
-            (cond
-             ((string= "emacs-orgmode.gnu.org" list-addr)
-              (format "https://list.orgmode.org/%s" (mu4e-message-field msg :message-id)))
-             (t (user-error "Mailing list %s not supported" list-addr)))))
-      (message "Link %s copied to clipboard" (gui-select-text msg-url))
-      msg-url))
-
-  (add-to-list 'mu4e-view-actions (cons "link to message ML" #'+mu4e-ml-message-link) t))
-#+end_src
 
 *** Org Msg
 Doom does a fantastic stuff with the defaults with this, so we only make a few
@@ -5057,13 +4805,6 @@ be changed with the following file. For system-wide changes try
 #+end_src
 What's nice is that Papirus [[https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/commit/a10fb7f2423d5e30b9c4477416ccdc93c4f3849d][now]] has an icon for =text/org=.
 One simply needs to refresh their mime database
-#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "") "setup.sh" "no")
-update-mime-database ~/.local/share/mime
-#+end_src
-Then set Emacs as the default editor
-#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "emacs-client.desktop\n") "no" "setup.sh")
-xdg-mime default emacs.desktop text/org
-#+end_src
 **** Git diffs
 Protesilaos wrote a [[https://protesilaos.com/codelog/2021-01-26-git-diff-hunk-elisp-org/][very helpful article]] in which he explains how to change the
 git diff chunk heading to something more useful than just the immediate line
@@ -5080,6 +4821,86 @@ Then adding a regex for it to =~/.config/git/config=
   xfuncname = "^(\\*+ +.*)$"
 #+end_src
 
+**** Development
+Testing patches from the ML is currently more hassle than it needs to be. Let's
+change that.
+#+begin_src emacs-lisp
+(defvar +org-ml-target-dir "~/.emacs.d/.local/straight/repos/org-mode/")
+(defvar +org-ml-max-age 600
+  "Maximum permissible age in seconds.")
+(defvar +org-ml--cache-timestamp 0)
+(defvar +org-ml--cache nil)
+
+(define-minor-mode +org-ml-patchy-mood-mode
+  "Apply patches to Org in bulk."
+  :global t
+  (let ((action (cons "apply patch to org" #'+org-ml-apply-patch)))
+    (if +org-ml-patchy-mood-mode
+        (add-to-list 'mu4e-view-actions action)
+      (setq mu4e-view-actions (delete action mu4e-view-actions)))))
+
+(defun +org-ml-apply-patch (msg)
+  "Apply the patch in the current message to Org."
+  (interactive)
+  (unless msg (setq msg (mu4e-message-at-point)))
+  (with-current-buffer (get-buffer-create "*Shell: Org apply patches*")
+    (erase-buffer)
+    (let* ((default-directory +org-ml-target-dir)
+           (exit-code (call-process "git" nil t nil "am" (mu4e-message-field msg :path))))
+      (magit-refresh)
+      (when (not (= 0 exit-code))
+        (+popup/buffer)))))
+
+(defun +org-ml-current-patches ()
+  "Get the currently open patches, as a list of alists.
+Entries of the form (subject . id)."
+  (delq nil
+        (mapcar
+         (lambda (entry)
+           (unless (plist-get entry :fixed)
+             (cons
+              (format "%-8s  %s"
+                      (propertize
+                       (replace-regexp-in-string "T.*" ""
+                                                 (plist-get entry :date))
+                       'face 'font-lock-doc-face)
+                      (propertize
+                       (replace-regexp-in-string "\\[PATCH\\] ?" ""
+                                                 (plist-get entry :summary))
+                       'face 'font-lock-keyword-face))
+              (plist-get entry :id))))
+         (with-current-buffer (url-retrieve-synchronously "https://updates.orgmode.org/data/patches")
+           (goto-char url-http-end-of-headers)
+           (json-parse-buffer :object-type 'plist)))))
+
+(defun +org-ml-select-patch-thread ()
+  "Find and apply a proposed Org patch."
+  (interactive)
+  (let* ((current-workspace (+workspace-current))
+         (patches (progn
+                    (when (or (not +org-ml--cache)
+                              (> (- (float-time) +org-ml--cache-timestamp)
+                                 +org-ml-max-age))
+                      (setq +org-ml--cache (+org-ml-current-patches)
+                            +org-ml--cache-timestamp (float-time)))
+                    +org-ml--cache))
+         (msg-id (cdr (assoc (completing-read
+                              "Thread: " (mapcar #'car patches))
+                             patches))))
+    (+workspace-switch +mu4e-workspace-name)
+    (mu4e-view-message-with-message-id msg-id)
+    (unless +org-ml-patchy-mood-mode
+      (add-to-list 'mu4e-view-actions
+                   (cons "apply patch to org" #'+org-ml-transient-mu4e-action)))))
+
+(defun +org-ml-transient-mu4e-action (msg)
+  (setq mu4e-view-actions
+        (delete (cons "apply patch to org" #'+org-ml-transient-mu4e-action)
+                mu4e-view-actions))
+  (+workspace/other)
+  (magit-status +org-ml-target-dir)
+  (+org-ml-apply-patch msg))
+#+end_src
 *** Packages
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle packages.el :comments no
@@ -5132,7 +4953,7 @@ correct package statement needed.
 (package! org-contrib
   :recipe (:host nil :repo "https://git.sr.ht/~bzg/org-contrib"
            :files ("lisp/*.el"))
-  :pin "b8012e759bd5bf5da802b0b41734a8fec218323c")
+  :pin "fc81309cf6756607a836f93049a9393c2967c4e0")
 #+end_src
 
 **** Visuals
@@ -5443,9 +5264,9 @@ There's also the new =org-cite= though. It would be nice to try that out.
 To improve =org-cite=.
 
 #+begin_src emacs-lisp :noweb-ref none :tangle packages.el
-(package! bibtex-actions :pin "8130de52d9bf246d56bda0299ffea08108f0463b")
-(package! citeproc :pin "91d7630de1ec61ff5d5e62c27d820207ec5bb1c6")
-(package! bibtex-completion :pin "bb47f355b0da8518aa3fb516019120c14c8747c9")
+(package! citeproc :pin "299e52b2dda37960d609efa78c40e255001d163a")
+(package! bibtex-completion :pin "12079bb09f203dda5cc2dd003bd60a6ad490f762")
+(package! bibtex-actions :pin "0e825fafe4f5843f9af4aed0bff8cc393fcae9f2")
 (package! org-cite-csl-activate :recipe (:host github :repo "andras-simonyi/org-cite-csl-activate") :pin "032e765a4cf634fc56abcd18488510d3d5b1ee09")
 #+end_src
 
@@ -5509,15 +5330,11 @@ To improve =org-cite=.
     (interactive)
     (setq org-cite-activate-processor 'csl-activate)
     (add-hook! 'org-mode-hook '((lambda () (cursor-sensor-mode 1)) org-cite-csl-activate-render-all))
-    (defadvice! +org-cite-csl-activate-render-all-silent (orig-fn)
-      :around #'org-cite-csl-activate-render-all
-      (with-silent-modifications (funcall orig-fn)))
     (when (eq major-mode 'org-mode)
-      (with-silent-modifications
-        (save-excursion
-          (goto-char (point-min))
-          (org-cite-activate (point-max)))
-        (org-cite-csl-activate-render-all)))))
+      (save-excursion
+        (goto-char (point-min))
+        (org-cite-activate (point-max)))
+      (org-cite-csl-activate-render-all))))
 
 (use-package! oc-bibtex-actions
   :when (featurep! :completion vertico)
@@ -6061,7 +5878,7 @@ the [[*Window title][Window title]].
 Org-roam is nice by itself, but there are so /extra/ nice packages which integrate
 with it.
 #+begin_src emacs-lisp :noweb-ref none :tangle packages.el
-(package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")) :pin "cd1aefd56f648d32a25aae672ac1ab90893c0133")
+(package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")) :pin "c745d07018a46b1a20b9f571d999ecf7a092c2e1")
 (package! websocket :pin "fda4455333309545c0787a79d73c19ddbeb57980") ; dependency of `org-roam-ui'
 #+end_src
 
@@ -9844,41 +9661,6 @@ able to handle anyway. For them we define a table of LaTeX translations
 #+begin_src emacs-lisp :noweb no-export
 <<gen-latex-non-ascii-char-substitutions()>>
 #+end_src
-**** Normal spaces after abbreviations
-
-In LaTeX inter-word and sentence spaces are typically of different widths. This
-can be an issue when using abbreviations i.e. e.g. etc. et al..
-This can be corrected by forcing a normal space with src_LaTeX{\ }.
-When exporting Org documents, we can add a filter to check for common
-abbreviations and make the space normal.
-
-#+begin_src emacs-lisp
-(defvar +org-latex-abbreviations
-  '(;; Latin
-    "cf." "e.g." "etc." "et al." "i.e." "v." "vs." "viz." "n.b."
-    ;; Corperate
-    "inc." "govt." "ltd." "pty." "dept."
-    ;; Temporal
-    "est." "c."
-    ;; Honorifics
-    "Dr." "Mr." "Mrs." "Ms." "Miss." "Sr." "Jr."
-    ;; Components of a work
-    "ed." "vol." "sec." "chap." "pt." "pp." "op." "no."
-    ;; Common usage
-    "approx." "misc." "min." "max.")
-  "A list of abbreviations that should be spaced correctly when exporting to LaTeX.")
-
-(defun +org-latex-correct-latin-abbreviation-spaces (text backend _info)
-  "Normalise spaces after Latin abbreviations."
-  (when (org-export-derived-backend-p backend 'latex)
-    (replace-regexp-in-string (rx (group (or line-start space)
-                                         (regexp (regexp-opt-group +org-latex-abbreviations)))
-                                  (or line-end space))
-                              "\\1\\\\ "
-                              text)))
-
-(add-to-list 'org-export-filter-paragraph-functions #'+org-latex-correct-latin-abbreviation-spaces t)
-#+end_src
 
 **** Extra special strings
 LaTeX already recognises =---= and =--= as em/en-dashes, =\-= as a shy hyphen, and the
@@ -10868,7 +10650,7 @@ Of course, there's an Emacs mode for this.
 
 #+begin_src emacs-lisp :tangle packages.el
 (package! beancount :recipe (:host github :repo "beancount/beancount-mode")
-  :pin "ea8257881b7e276e8d170d724e3b2e179f25cb77")
+  :pin "5be04a37d6a189f1680cb47d022a85d9faeba8fc")
 #+end_src
 
 #+begin_src emacs-lisp
