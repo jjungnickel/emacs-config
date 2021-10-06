@@ -144,7 +144,9 @@ def getMailBoxes(account):
     boxes = subprocess.run(
         ["mbsync", "--list", account], check=True, stdout=subprocess.PIPE, timeout=10.0
     )
-    return boxes.stdout.decode("utf-8").strip().split("\n")
+    items = boxes.stdout.decode("utf-8").strip().split("\n")
+    return list(map(lambda x: re.search(r"^(.+?)(?= <=>)", x).group(1), items))
+
 
 
 def applyPatternFilter(pattern, mailboxes):
