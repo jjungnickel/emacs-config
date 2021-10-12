@@ -1,5 +1,7 @@
 .*
+!.git-crypt
 !.dir-locals.el
+!.custom.el
 _minted-config
 abbrev.el
 config.*
