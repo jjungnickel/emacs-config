@@ -504,7 +504,6 @@ I reckon enabling half the modules Doom provides should do it.
 #+name: doom-completion
 #+begin_src emacs-lisp
 (company)                     ; the ultimate code completion backend
-;; +childframe                ; ... when your children are better than you
 ;;helm                       ; the *other* search engine for love and life
 ;;ido                        ; the other *other* search engine...
 ;; (ivy                      ; a search engine for love and life
@@ -625,7 +624,7 @@ associated file.
 #+name: doom-lang
 #+begin_src emacs-lisp
 ;;agda                       ; types of types of types of types...
-;;beancount                  ; mind the GAAP
+(beancount +lsp)             ; mind the GAAP
 ;;cc                         ; C/C++/Obj-C madness
 ;;clojure                    ; java with a lisp
 ;;common-lisp                ; if you've seen one lisp, you've seen them all
@@ -5129,6 +5128,26 @@ post-processing the =latexdiff= result.
         (replace-match (format "definecolor{blue}{HTML}{%s}" blue)))))
   (add-to-list 'orgdiff-latexdiff-postprocess-hooks #'+orgdiff-nicer-change-colours))
 #+end_src
+***** TODO Kubernetes
+I'd really like to apply kubernetes manifests right from _source_ blocks. For
+this, there is [[https://github.com/ifitzpat/ob-kubectl][GitHub - ifitzpat/ob-kubectl: Org babel extension to apply
+kubectl to org bab...]] and should be applied like this:
+#+begin_src emacs-lisp :tangle no
+(use-package ob-kubectl
+  :ensure-system-package kubectl
+  :ensure t
+  :defer t
+  :quelpa ((ob-kubectl :fetcher github :repo "ifitzpat/ob-kubectl") :upgrade t)
+  :config
+  (add-to-list 'org-babel-load-languages '(kubectl . t))
+  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
+)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+;(use-package! ob-kubectl)
+#+end_src
+
 *** Behaviour
 [[xkcd:1319]]
 **** Tweaking defaults
@@ -5426,7 +5445,7 @@ Now, by default, LSPs don't really function at all in ~src~ blocks.
                 (format "Prepare local buffer environment for org source block (%s)."
                         (upcase ,lang))))))))
 (defvar org-babel-lang-list
-  '("go" "python" "ipython" "bash" "sh"))
+  '("go" "python" "ipython" "bash" "sh" "beancount"))
 (dolist (lang org-babel-lang-list)
   (eval `(lsp-org-babel-enable ,lang)))
 #+end_src
@@ -5485,6 +5504,9 @@ The agenda is nice, but a souped up version is nicer.
       org-agenda-tags-column 100 ;; from testing this seems to be a good value
       org-agenda-compact-blocks t)
 
+(setq org-agenda-files
+      (list "~/org/todo.org" "~/org/projects.org" "~/org/work/2021/"))
+
 (setq org-agenda-custom-commands
       '(("o" "Overview"
          ((agenda "" ((org-agenda-span 'day)
@@ -5498,7 +5520,7 @@ The agenda is nice, but a souped up version is nicer.
           (alltodo "" ((org-agenda-overriding-header "")
                        (org-super-agenda-groups
                         '((:name "Next to do"
-                           :todo "NEXT"
+                           :tag "Next"
                            :order 1)
                           (:name "Important"
                            :tag "Important"
@@ -5850,13 +5872,13 @@ no modeline.
 I'll just set this to be within =Organisation= folder for now, in the future it
 could be worth seeing if I could hook this up to a [[https://nextcloud.com/][Nextcloud]] instance.
 #+begin_src emacs-lisp :noweb-ref none :tangle yes
-(setq org-roam-directory "~/Desktop/TEC/Organisation/Roam/")
+(setq org-roam-directory "~/Documents/Organisation/Roam/")
 #+end_src
 
 That said, if the directory doesn't exist we likely don't want to be using roam.
 Since we don't want to trigger errors (which will happen as soon as roam tries
 to initialise), let's not load roam.
-#+begin_src emacs-lisp :noweb-ref none :tangle (if (file-exists-p "~/Desktop/TEC/Organisation/Roam/") "no" "packages.el")
+#+begin_src emacs-lisp :noweb-ref none :tangle (if (file-exists-p "~/Documents/Organisation/Roam/") "no" "packages.el")
 (package! org-roam :disable t)
 #+end_src
 ***** Modeline file name
@@ -10639,38 +10661,4 @@ sixth greyed out. Since the sixth level is so small, I'll turn up the boldness a
   '(markdown-header-face-4 :height 1.00 :weight bold       :inherit markdown-header-face)
   '(markdown-header-face-5 :height 0.90 :weight bold       :inherit markdown-header-face)
   '(markdown-header-face-6 :height 0.75 :weight extra-bold :inherit markdown-header-face))
-#+end_src
-** Beancount
-There are a number of rather compelling advantages to [[https://plaintextaccounting.org/][plain text accounting]],
-with [[https://www.ledger-cli.org/][ledger]] being the most obvious example. However, [[https://github.com/beancount/beancount][beancount]], a more recent
-implementation of the idea is ledger-compatible (meaning I can switch easily if
-I change my mind) and has a gorgeous front-end --- [[https://beancount.github.io/fava/][fava]].
-
-Of course, there's an Emacs mode for this.
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! beancount :recipe (:host github :repo "beancount/beancount-mode")
-  :pin "5be04a37d6a189f1680cb47d022a85d9faeba8fc")
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package! beancount
-  :mode ("\\.beancount\\'" . beancount-mode)
-  :init
-  (after! all-the-icons
-    (add-to-list 'all-the-icons-icon-alist
-                 '("\\.beancount\\'" all-the-icons-material "attach_money" :face all-the-icons-lblue))
-    (add-to-list 'all-the-icons-mode-icon-alist
-                 '(beancount-mode all-the-icons-material "attach_money" :face all-the-icons-lblue)))
-  :config
-  (setq beancount-electric-currency t)
-  (defun beancount-bal ()
-    "Run bean-report bal."
-    (interactive)
-    (let ((compilation-read-command nil))
-      (beancount--run "bean-report"
-                      (file-relative-name buffer-file-name) "bal")))
-  (map! :map beancount-mode-map
-        :n "TAB" #'beancount-align-to-previous-number
-        :i "RET" (cmd! (newline-and-indent) (beancount-align-to-previous-number))))
 #+end_src
