@@ -379,7 +379,7 @@ ess                          ; emacs speaks statistics
 ;;fsharp                     ; ML stands for Microsoft's Language
 ;;fstar                      ; (dependent) types and (monadic) effects and Z3
 ;;gdscript                   ; the language you waited for
-;;(go +lsp)                  ; the hipster dialect
+(go +lsp)                  ; the hipster dialect
 ;;(haskell +lsp)             ; a language that's lazier than I am
 ;;hy                         ; readability of scheme w/ speed of python
 ;;idris                      ;
@@ -387,7 +387,7 @@ json                         ; At least it ain't XML
 ;;(java +meghanada)          ; the poster child for carpal tunnel syndrome
 (javascript +lsp)            ; all(hope(abandon(ye(who(enter(here))))))
 ;;(julia +lsp)                 ; Python, R, and MATLAB in a blender
-;;kotlin                     ; a better, slicker Java(Script)
+(kotlin +lsp)                     ; a better, slicker Java(Script)
 (latex                       ; writing papers in Emacs has never been so fun
  +latexmk                    ; what else would you use?
  +cdlatex                    ; quick maths symbols
@@ -469,10 +469,10 @@ Many distribution-packages for Iosevka don't contain all variants that I like,
 so I just download the [[https://github.com/be5invis/Iosevka/releases][latest release]] and unpack the =.ttc= file into =~/.local/share/fonts/=
 
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Iosevka" :size 26 :weight 'light)
-      doom-big-font (font-spec :family "Iosevka" :size 40)
+(setq doom-font (font-spec :family "Iosevka Fixed" :size 26 :weight 'light)
+      doom-big-font (font-spec :family "Iosevka Fixed" :size 40)
       doom-variable-pitch-font (font-spec :family "Overpass" :size 26)
-      doom-unicode-font (font-spec :family "Iosevka")
+      doom-unicode-font (font-spec :family "Iosevka Fixed")
       doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
 #+end_src
 
@@ -488,7 +488,7 @@ if the system doesn't have any of those fonts.
 
 #+name: detect-missing-fonts
 #+begin_src emacs-lisp :tangle no
-(defvar required-fonts '("JetBrainsMono.*" "Overpass" "JuliaMono" "IBM Plex Mono" "Merriweather" "Alegreya"))
+(defvar required-fonts '("Iosevka Fixed" "Overpass" "IBM Plex Mono" "Merriweather" "Alegreya"))
 
 (defvar available-fonts
   (delete-dups (or (font-family-list)
@@ -2136,7 +2136,6 @@ tweaks. Namely:
 
 #+attr_html: :class invertible :alt Writeroom applied to an Org file
 [[https://tecosaur.com/lfs/emacs-config/screenshots/writeroom-and-org.png]]
-
 *** Treemacs
 #+begin_quote
 From the =:ui treemacs= module.
@@ -7669,6 +7668,29 @@ Not added when either:
                (not (assoc :sync (caddr result))))
       (push '(:async) (caddr result)))
     result))
+#+end_src
+** LaTeX
+*** Compilation
+#+begin_src emacs-lisp
+(setq TeX-save-query nil
+      TeX-show-compilation t
+      TeX-command-extra-options "-shell-escape")
+(after! latex
+  (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t)))
+#+end_src
+#+begin_src emacs-lisp
+(setq +latex-viewers '(pdf-tools evince zathura okular skim sumatrapdf))
+#+end_src
+*** SyncTeX
+#+begin_src emacs-lisp
+(after! tex
+  (add-to-list 'TeX-view-program-list '("Evince" "evince %o"))
+  (add-to-list 'TeX-view-program-selection '(output-pdf "Evince")))
+#+end_src
+*** Fixes
+#+begin_src emacs-lisp
+(when EMACS28+
+  (add-hook 'latex-mode-hook #'TeX-latex-mode))
 #+end_src
 ** Graphviz
 
