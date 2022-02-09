@@ -1,3 +1,0 @@
-* Inbox
-** TODO Installation commands for lsp servers
-[[file:~/.config/doom/config.org::*Prerequisites][Prerequisites]]
