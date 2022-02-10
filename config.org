@@ -1,0 +1,21 @@
+#+title: My Doom Emacs Config
+#+author: Jan Jungnickel
+
+* Hard Defaults
+There are some things that basically never change for me, some just because they are constant by their very nature. Let's write them down first, and get this out of the way.
+
+Let's get started with the absolute basics and introduce myself.
+
+#+begin_src emacs-lisp
+(setq user-full-name "Jan Jungnickel"
+      user-mail-address "jan@jungnickel.com")
+#+end_src
+
+Next we configure popup-rules and default fonts.
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-one)
+(setq doom-font (font-spec :family "Iosevka Fixed" :size 32))
+
+(when (equal window-system 'x) (toggle-frame-fullscreen))
+#+end_src
+
