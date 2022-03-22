@@ -1,21 +1,236 @@
 #+title: My Doom Emacs Config
 #+author: Jan Jungnickel
 
-* Hard Defaults
+* Rudimentary configuration
 There are some things that basically never change for me, some just because they are constant by their very nature. Let's write them down first, and get this out of the way.
 
 Let's get started with the absolute basics and introduce myself.
 
 #+begin_src emacs-lisp
+;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 (setq user-full-name "Jan Jungnickel"
       user-mail-address "jan@jungnickel.com")
 #+end_src
-
-Next we configure popup-rules and default fonts.
+** Look and Feel
+*** Theme
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-one)
-(setq doom-font (font-spec :family "Iosevka Fixed" :size 32))
-
-(when (equal window-system 'x) (toggle-frame-fullscreen))
+;; I am the night! The Tokyo night. When it's dark.
+(setq doom-theme 'doom-tokyo-night)
 #+end_src
 
++ A small change so that the highlight selection isn't the same color as the org-babel background color.
+#+begin_src emacs-lisp :tangle yes
+(custom-set-faces!
+  ;;'(region :background "#2d3145")
+  '(org-block :background "#373c56"))
+  ;;'(org-block-begin-line :background "#373c56" :foreground "#7d8098")
+  ;;'(org-block-end-line :background "#373c56" :foreground "#7d8098"))
+#+end_src
+*** Fonts
+Next we configure popup-rules and default fonts.
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "Iosevka" :size 30 :weight 'semibold)
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 22 :weight 'medium)
+      doom-unicode-font (font-spec :family "Noto Color Emoji" :weight 'regular)
+      doom-serif-font (font-spec :family "BlexMono Nerd Font" :weight 'light))
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic)
+  '(font-lock-keyword-face :slant italic))
+#+end_src
+
++ This will enable gravatars when viewing commits. The service used by default is [[https://www.libravatar.org/][Libravatar]].
+#+begin_src emacs-lisp :tangle yes
+;; gravatars in my commits
+(setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+#+end_src
+*** Better defaults
+*** Simple settings
+Browsing the web and seeing [[https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#use-better-defaults][angrybacon/dotemacs]] and comparing with the values
+shown by =SPC h v= and selecting what I thought looks good, I've ended up adding
+the following:
+
+#+begin_src emacs-lisp
+(setq-default
+ delete-by-moving-to-trash t                      ; Delete files to trash
+ window-combination-resize t                      ; take new window space from all other windows (not just current)
+ x-stretch-cursor t)                              ; Stretch cursor to the glyph width
+
+(setq undo-limit 80000000                         ; Raise undo-limit to 80Mb
+      evil-want-fine-undo t                       ; By default while in insert all changes are one big blob. Be more granular
+      auto-save-default t                         ; Nobody likes to lose work, I certainly don't
+      truncate-string-ellipsis "︙"                ; Unicode ellispis are nicer than "...", and also save /precious/ space
+      password-cache-expiry nil                   ; I can trust my computers ... can't I?
+      ;; scroll-preserve-screen-position 'always     ; Don't have `point' jump around
+      scroll-margin 2)                            ; It's nice to maintain a little margin
+(global-auto-revert-mode 1)                       ; Revert buffers when changed outside emacs
+(display-time-mode 1)                             ; Enable time in the mode-line
+
+(unless (string-match-p "^Power N/A" (battery))   ; On laptops...
+  (display-battery-mode 1))                       ; it's nice to know how much power you have
+
+(global-subword-mode 1)                           ; Iterate through CamelCase words
+#+end_src
+*** Auto-customisations
+By default changes made via a customisation interface are added to =init.el=.
+I prefer the idea of using a separate file for this. We just need to change a
+setting, and load it if it exists.
+#+begin_src emacs-lisp
+(setq-default custom-file (expand-file-name ".custom.el" doom-private-dir))
+(when (file-exists-p custom-file)
+  (load custom-file))
+#+end_src
+*** Paths
+Now I add my default folders and files that I want emacs/org-mode to use:
+#+begin_src emacs-lisp
+(setq org-directory "~/org/"
+      projectile-project-search-path '("~/source/"))
+#+end_src
+* Language configuration
+** Org
+:PROPERTIES:
+:CUSTOM_ID: org
+:END:
+*** Basic setup and paths
+#+begin_src emacs-lisp
+(require 'org-habit)
+(require 'org-id)
+(require 'org-checklist)
+
+(after! org
+  (setq org-archive-location "~/org/gtd/archive.org::* %s"
+        org-agenda-files '("~/org/gtd/inbox.org"
+                           "~/org/gtd/gtd.org"
+                           "~/org/gtd/tickler.org")
+        org-todo-keywords '((sequence
+                             "TODO(t)" "NEXT(n)" "PROG(p)" "INTR(i)" "DELE(g)" "|" "DONE(d)"))))
+
+#+end_src
+*** Capture templates
+#+begin_src emacs-lisp
+(setq org-capture-templates '(("t" "Todo [inbox]" entry (file+headline "~/org/gtd/inbox.org" "Tasks") "* TODO %i%?")
+                              ("T" "Tickler" entry (file+headline "~/org/gtd/tickler.org" "Tickler") "* %i%? \n %U")))
+
+(setq org-refile-targets '(("~/org/gtd/gtd.org" :maxlevel . 3)
+                           ("~/org/gtd/someday.org" :level . 1)
+                           ("~/org/gtd/tickler.org" :maxlevel . 2)))
+#+end_src
+*** Look and feel
+
+#+begin_src emacs-lisp
+(after! org-superstar
+  (setq org-superstar-headline-bullets-list '("◉" "○" "✸" "✿")
+        org-superstar-item-bullet-alist '((?+ . ?▶))
+        org-superstar-prettify-item-bullets t ))
+
+(setq org-ellipsis " ▾ "
+      org-priority-highest ?A
+      org-priority-lowest ?E
+      org-priority-faces
+      '((?A . 'all-the-icons-red)
+        (?B . 'all-the-icons-orange)
+        (?C . 'all-the-icons-yellow)
+        (?D . 'all-the-icons-green)
+        (?E . 'all-the-icons-blue)))
+
+(after! org
+  (custom-set-faces!
+    '(org-level-1 :height 1.15 :inherit outline-1)
+    '(org-level-2 :height 1.13 :inherit outline-2)
+    '(org-level-3 :height 1.11 :inherit outline-3)
+    '(org-level-4 :height 1.09 :inherit outline-4)
+    '(org-level-5 :height 1.07 :inherit outline-5)
+    '(org-level-6 :height 1.05 :inherit outline-6)
+    '(org-level-7 :height 1.03 :inherit outline-7)
+    '(org-level-8 :height 1.01 :inherit outline-8))
+  (setq org-todo-keyword-faces '(("NEXT" . org-warning) ("PROG" . "yellow"))))
+#+end_src
+
+It's also nice to make use of the Unicode characters for check boxes, and other commands.
+#+begin_src emacs-lisp
+(appendq! +ligatures-extra-symbols
+          `(:checkbox      "☐"
+            :pending       "◼"
+            :checkedbox    "☑"
+            :list_property "∷"
+            :em_dash       "—"
+            :ellipses      "…"
+            :arrow_right   "→"
+            :arrow_left    "←"
+            :title         "𝙏"
+            :subtitle      "𝙩"
+            :author        "𝘼"
+            :date          "𝘿"
+            :property      "☸"
+            :options       "⌥"
+            :startup       "⏻"
+            :macro         "𝓜"
+            :html_head     "🅷"
+            :html          "🅗"
+            :latex_class   "🄻"
+            :latex_header  "🅻"
+            :beamer_header "🅑"
+            :latex         "🅛"
+            :attr_latex    "🄛"
+            :attr_html     "🄗"
+            :attr_org      "⒪"
+            :begin_quote   "❝"
+            :end_quote     "❞"
+            :caption       "☰"
+            :header        "›"
+            :results       "↣"
+            :begin_export  "⏩"
+            :end_export    "⏪"
+            :properties    "⚙"
+            :end           "∎"
+            :priority_a   ,(propertize "⚑" 'face 'all-the-icons-red)
+            :priority_b   ,(propertize "⬆" 'face 'all-the-icons-orange)
+            :priority_c   ,(propertize "■" 'face 'all-the-icons-yellow)
+            :priority_d   ,(propertize "⬇" 'face 'all-the-icons-green)
+            :priority_e   ,(propertize "❓" 'face 'all-the-icons-blue)))
+
+(set-ligatures! 'org-mode
+  :merge t
+  :checkbox      "[ ]"
+  :pending       "[-]"
+  :checkedbox    "[X]"
+  :list_property "::"
+  :em_dash       "---"
+  :ellipsis      "..."
+  :arrow_right   "->"
+  :arrow_left    "<-"
+  :title         "#+title:"
+  :subtitle      "#+subtitle:"
+  :author        "#+author:"
+  :date          "#+date:"
+  :property      "#+property:"
+  :options       "#+options:"
+  :startup       "#+startup:"
+  :macro         "#+macro:"
+  :html_head     "#+html_head:"
+  :html          "#+html:"
+  :latex_class   "#+latex_class:"
+  :latex_header  "#+latex_header:"
+  :beamer_header "#+beamer_header:"
+  :latex         "#+latex:"
+  :attr_latex    "#+attr_latex:"
+  :attr_html     "#+attr_html:"
+  :attr_org      "#+attr_org:"
+  :begin_quote   "#+begin_quote"
+  :end_quote     "#+end_quote"
+  :caption       "#+caption:"
+  :header        "#+header:"
+  :begin_export  "#+begin_export"
+  :end_export    "#+end_export"
+  :results       "#+RESULTS:"
+  :property      ":PROPERTIES:"
+  :end           ":END:"
+  :priority_a    "[#A]"
+  :priority_b    "[#B]"
+  :priority_c    "[#C]"
+  :priority_d    "[#D]"
+  :priority_e    "[#E]")
+(plist-put +ligatures-extra-symbols :name "⁍")
+#+end_src
