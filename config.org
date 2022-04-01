@@ -14,22 +14,13 @@ Let's get started with the absolute basics and introduce myself.
 ** Look and Feel
 *** Theme
 #+begin_src emacs-lisp
-;; I am the night! The Tokyo night. When it's dark.
-(setq doom-theme 'doom-tokyo-night)
+(setq doom-theme 'doom-one)
 #+end_src
 
-+ A small change so that the highlight selection isn't the same color as the org-babel background color.
-#+begin_src emacs-lisp :tangle yes
-(custom-set-faces!
-  ;;'(region :background "#2d3145")
-  '(org-block :background "#373c56"))
-  ;;'(org-block-begin-line :background "#373c56" :foreground "#7d8098")
-  ;;'(org-block-end-line :background "#373c56" :foreground "#7d8098"))
-#+end_src
 *** Fonts
 Next we configure popup-rules and default fonts.
-#+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Iosevka" :size 30 :weight 'semibold)
+#+begin_src emacs-lisp :tangle yes
+(setq doom-font (font-spec :family "Iosevka" :size 30 :weight 'light)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 22 :weight 'medium)
       doom-unicode-font (font-spec :family "Noto Color Emoji" :weight 'regular)
       doom-serif-font (font-spec :family "BlexMono Nerd Font" :weight 'light))
@@ -87,6 +78,82 @@ Now I add my default folders and files that I want emacs/org-mode to use:
 #+begin_src emacs-lisp
 (setq org-directory "~/org/"
       projectile-project-search-path '("~/source/"))
+#+end_src
+* Packages
+* Packages
+** Loading instructions
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle no
+:END:
+This is where you install packages, by declaring them with the ~package!~ macro in
+=packages.el=, then running ~doom refresh~ on the command line.
+This file shouldn't be byte compiled.
+#+begin_src emacs-lisp :tangle "packages.el" :comments no
+;; -*- no-byte-compile: t; -*-
+#+end_src
+
+You'll then need to restart Emacs for your changes to take effect! Or at least,
+run =M-x doom/reload=.
+
+*Warning*: Don't disable core packages listed in =~/.emacs.d/core/packages.el=.
+Doom requires these, and disabling them may have terrible side effects.
+
+*** Packages in MELPA/ELPA/emacsmirror
+To install ~some-package~ from MELPA, ELPA or emacsmirror:
+#+begin_src emacs-lisp
+(package! some-package)
+#+end_src
+
+*** Packages from git repositories
+To install a package directly from a particular repo, you'll need to specify
+a ~:recipe~. You'll find documentation on what ~:recipe~ accepts [[https://github.com/raxod502/straight.el#the-recipe-format][here]]:
+#+begin_src emacs-lisp
+(package! another-package
+  :recipe (:host github :repo "username/repo"))
+#+end_src
+
+If the package you are trying to install does not contain a ~PACKAGENAME.el~
+file, or is located in a subdirectory of the repo, you'll need to specify
+~:files~ in the ~:recipe~:
+#+begin_src emacs-lisp
+(package! this-package
+  :recipe (:host github :repo "username/repo"
+           :files ("some-file.el" "src/lisp/*.el")))
+#+end_src
+
+*** Disabling built-in packages
+If you'd like to disable a package included with Doom, for whatever reason,
+you can do so here with the ~:disable~ property:
+#+begin_src emacs-lisp
+(package! builtin-package :disable t)
+#+end_src
+You can override the recipe of a built in package without having to specify
+all the properties for ~:recipe~. These will inherit the rest of its recipe
+from Doom or MELPA/ELPA/Emacsmirror:
+#+begin_src emacs-lisp
+(package! builtin-package :recipe (:nonrecursive t))
+(package! builtin-package-2 :recipe (:repo "myfork/package"))
+#+end_src
+
+Specify a ~:branch~ to install a package from a particular branch or tag.
+#+begin_src emacs-lisp
+(package! builtin-package :recipe (:branch "develop"))
+#+end_src
+** Tools
+*** Screenshot
+
+This makes it a breeze to take lovely screenshots.
+#+begin_src emacs-lisp :tangle packages.el
+(package! screenshot
+  :recipe (:host github :repo "yangsheng6810/screenshot"))
+#+end_src
+
+Some light configuring is all we need, so we can make use of the [[https://github.com/Calinou/0x0][0x0]] wrapper
+file uploading script (which I've renamed to ~upload~).
+#+begin_src emacs-lisp
+(use-package! screenshot
+  :defer t
+  :config (setq screenshot-upload-fn "upload %s 2>/dev/null"))
 #+end_src
 * Language configuration
 ** Org
