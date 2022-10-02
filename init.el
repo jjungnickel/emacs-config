@@ -192,5 +192,5 @@
        literate
        (default +bindings +smartparens))
 
-(when noninteractive
-  (add-to-list 'doom-env-whitelist "^SSH_"))
+(after! doom-cli-env
+  (add-to-list 'doom-env-allow "^SSH_"))

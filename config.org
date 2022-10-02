@@ -19,8 +19,8 @@ Let's get started with the absolute basics and introduce myself.
 
 *** Fonts
 Next we configure popup-rules and default fonts.
-#+begin_src emacs-lisp :tangle yes
-(setq doom-font (font-spec :family "Iosevka" :size 30 :weight 'light)
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "Iosevka Comfy" :size 28 :weight 'light)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 22 :weight 'medium)
       doom-unicode-font (font-spec :family "Noto Color Emoji" :weight 'regular)
       doom-serif-font (font-spec :family "BlexMono Nerd Font" :weight 'light))
@@ -33,7 +33,7 @@ Next we configure popup-rules and default fonts.
 #+end_src
 
 + This will enable gravatars when viewing commits. The service used by default is [[https://www.libravatar.org/][Libravatar]].
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
 ;; gravatars in my commits
 (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
 #+end_src
@@ -76,7 +76,7 @@ setting, and load it if it exists.
 *** Paths
 Now I add my default folders and files that I want emacs/org-mode to use:
 #+begin_src emacs-lisp
-(setq org-directory "~/org/"
+(setq org-directory "~/nextcloud/org/"
       projectile-project-search-path '("~/source/"))
 #+end_src
 * Packages
@@ -167,22 +167,22 @@ file uploading script (which I've renamed to ~upload~).
 (require 'org-checklist)
 
 (after! org
-  (setq org-archive-location "~/org/gtd/archive.org::* %s"
-        org-agenda-files '("~/org/gtd/inbox.org"
-                           "~/org/gtd/gtd.org"
-                           "~/org/gtd/tickler.org")
+  (setq org-archive-location "~/nextcloud/org/gtd/archive.org::* %s"
+        org-agenda-files '("~/nextcloud/org/gtd/inbox.org"
+                           "~/nextcloud/org/gtd/gtd.org"
+                           "~/nextcloud/org/gtd/tickler.org")
         org-todo-keywords '((sequence
                              "TODO(t)" "NEXT(n)" "PROG(p)" "INTR(i)" "DELE(g)" "|" "DONE(d)"))))
 
 #+end_src
 *** Capture templates
 #+begin_src emacs-lisp
-(setq org-capture-templates '(("t" "Todo [inbox]" entry (file+headline "~/org/gtd/inbox.org" "Tasks") "* TODO %i%?")
-                              ("T" "Tickler" entry (file+headline "~/org/gtd/tickler.org" "Tickler") "* %i%? \n %U")))
+(setq org-capture-templates '(("t" "Todo [inbox]" entry (file+headline "~/nextcloud/org/gtd/inbox.org" "Tasks") "* TODO %i%?")
+                              ("T" "Tickler" entry (file+headline "~/nextcloud/org/gtd/tickler.org" "Tickler") "* %i%? \n %U")))
 
-(setq org-refile-targets '(("~/org/gtd/gtd.org" :maxlevel . 3)
-                           ("~/org/gtd/someday.org" :level . 1)
-                           ("~/org/gtd/tickler.org" :maxlevel . 2)))
+(setq org-refile-targets '(("~/nextcloud/org/gtd/gtd.org" :maxlevel . 3)
+                           ("~/nextcloud/org/gtd/someday.org" :level . 1)
+                           ("~/nextcloud/org/gtd/tickler.org" :maxlevel . 2)))
 #+end_src
 *** Look and feel
 
